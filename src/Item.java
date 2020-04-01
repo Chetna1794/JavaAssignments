@@ -27,4 +27,9 @@ public class Item {
 		this.itemName = name;
 		this.itemPrepTime = time;		
 	}
+	@Override
+	public String toString() {
+		return "Item [itemId=" + itemId + ", itemName=" + itemName + ", itemPrepTime=" + itemPrepTime + "]";
+	}
+	
 }

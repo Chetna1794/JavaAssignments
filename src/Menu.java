@@ -8,5 +8,5 @@ public class Menu {
 		itemMenu[2] = new Item(3,"Maggi",5.00);
 		itemMenu[3] = new Item(4,"Pizza",30.00);
 		itemMenu[4] = new Item(5,"Burger",20.00);
-	};
+	}
 }
