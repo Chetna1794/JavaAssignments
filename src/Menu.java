@@ -1,12 +1,28 @@
+import java.io.*;
 
 public class Menu {
-	public static Item[] itemMenu = new Item[5];
+	public static Item[] itemMenu = new Item[15];
 	
 	static {
-		itemMenu[0] = new Item(1,"Noodles",15.00);
-		itemMenu[1] = new Item(2,"Soup",7.00);
-		itemMenu[2] = new Item(3,"Maggi",5.00);
-		itemMenu[3] = new Item(4,"Pizza",30.00);
-		itemMenu[4] = new Item(5,"Burger",20.00);
-	};
+		try {
+			FileReader fileReaderObj = new FileReader("./src/main/resources/Items.txt");
+			BufferedReader bufferedReaderObj = new BufferedReader(fileReaderObj);
+			int itemIndex=0;  
+			String str;
+	        while((str = bufferedReaderObj.readLine())!=null ){
+	          String arr[] =  str.split(",");
+	          int itemId = Integer.parseInt(arr[0]);
+	          String itemName = arr[1];
+	          Double itemRate = Double.parseDouble(arr[2]);
+	          itemMenu[itemIndex] = new Item(itemId, itemName, itemRate); 
+	          itemIndex++;	          
+	        }  
+            bufferedReaderObj.close();
+            fileReaderObj.close();
+		} catch (FileNotFoundException fe) {
+			System.err.println(fe);
+		} catch (IOException ie) {
+			System.err.println(ie);
+		}
+	}
 }
