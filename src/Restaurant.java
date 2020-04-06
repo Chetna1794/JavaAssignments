@@ -1,11 +1,11 @@
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Restaurant implements IRestaurant  {
 	private static Order[] orderList = new Order[10];
 	private Customer CustomerList[] = new Customer[10];
-	private int counter;
 	
 	public static Order[] getOrderList() {
 		return orderList;
@@ -13,14 +13,6 @@ public class Restaurant implements IRestaurant  {
 
 	public static void setOrderList(Order[] orderList) {
 		Restaurant.orderList = orderList;
-	}
-
-	public int getCounter() {
-		return counter;
-	}
-
-	public void setCounter(int counter) {
-		this.counter = counter;
 	}
 	
 	public Customer[] getCustomerList() {
@@ -36,9 +28,12 @@ public class Restaurant implements IRestaurant  {
 	 */
 	public void showMenu() {
 		try {
-			for(int i=0; i < Menu.itemMenu.length; i++) {
-				System.out.println(Menu.itemMenu[i].getItemId() + " - " + Menu.itemMenu[i].getItemName() + " - " + Menu.itemMenu[i].getItemPrepTime());;
+			Iterator<Item> i = Menu.itemMenu.iterator();
+			while (i.hasNext()) {
+				Item item = (Item) i.next();
+				System.out.println(item.getItemId() + " - " + item.getItemName() + " - " + item.getItemRate());
 			}
+			
 		} catch(NullPointerException ne) {
 			System.err.println(ne);
 		}
@@ -48,15 +43,7 @@ public class Restaurant implements IRestaurant  {
 	 * this function will take order from the customer
 	 */
 	public void takeOrder() {
-		int orderID = this.counter++;
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		Scanner sc= new Scanner(System.in);
-		int itemNumber= sc.nextInt();
-		Item[] selectedItem = new Item[10];
-		selectedItem[0] = Menu.itemMenu[itemNumber];
-		Order myOrder = new Order(orderID, currentDateTime, selectedItem);	
-		System.out.println("Your order details are: ");
-		System.out.println(myOrder);
+		Order.createOrder();
 	}
 	
 	/**
@@ -107,8 +94,8 @@ public class Restaurant implements IRestaurant  {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Owner ownerObj = new Owner();
-		ownerObj.modifyMenu();
+//		Owner ownerObj = new Owner();
+//		ownerObj.modifyMenu();
 		Restaurant res = new Restaurant();
 		Scanner sc= new Scanner(System.in);
 		int choice = 0;

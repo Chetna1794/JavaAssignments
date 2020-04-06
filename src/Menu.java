@@ -1,7 +1,8 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Menu {
-	public static Item[] itemMenu = new Item[15];
+	public static ArrayList<Item> itemMenu = new ArrayList<Item>();
 	
 	static {
 		try {
@@ -14,7 +15,8 @@ public class Menu {
 	          int itemId = Integer.parseInt(arr[0]);
 	          String itemName = arr[1];
 	          Double itemRate = Double.parseDouble(arr[2]);
-	          itemMenu[itemIndex] = new Item(itemId, itemName, itemRate); 
+	          Item i = new Item(itemId, itemName, itemRate); 
+	          itemMenu.add(i);
 	          itemIndex++;	          
 	        }  
             bufferedReaderObj.close();
