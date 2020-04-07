@@ -1,8 +1,11 @@
 
 public class Item {
+	// class variables
 	private int itemId;
 	private String itemName;
-	private double itemPrepTime;
+	private double itemRate;
+	
+	// Getter-Setter
 	public int getItemId() {
 		return itemId;
 	}
@@ -15,16 +18,23 @@ public class Item {
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
-	public double getItemPrepTime() {
-		return itemPrepTime;
-	}
-	public void setItemPrepTime(double itemPrepTime) {
-		this.itemPrepTime = itemPrepTime;
-	}
 	
-	Item(int id, String name, double time) {
+	public double getItemRate() {
+		return itemRate;
+	}
+	public void setItemRate(double itemRate) {
+		this.itemRate = itemRate;
+	}
+	// default constructor
+	Item(int id, String name, double rate) {
 		this.itemId = id;
 		this.itemName = name;
-		this.itemPrepTime = time;		
+		this.itemRate = rate;		
 	}
+	
+	@Override
+	public String toString() {
+		return "Item [itemId=" + itemId + ", itemName=" + itemName + ", itemRate=" + itemRate + "]";
+	}
+	
 }

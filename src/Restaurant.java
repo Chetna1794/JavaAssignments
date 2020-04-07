@@ -1,11 +1,11 @@
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.util.Scanner;
 
-public class Restaurant {
-	private static Order[] orderList = new Order[]{};
-	private int counter;
-	public char ans = 'y';
-	public static int i;
+public class Restaurant implements IRestaurant  {
+	private static Order[] orderList = new Order[10];
+	private Customer CustomerList[] = new Customer[10];
 	
 	public static Order[] getOrderList() {
 		return orderList;
@@ -14,46 +14,36 @@ public class Restaurant {
 	public static void setOrderList(Order[] orderList) {
 		Restaurant.orderList = orderList;
 	}
-
-	public int getCounter() {
-		return counter;
+	
+	public Customer[] getCustomerList() {
+		return CustomerList;
 	}
 
-	public void setCounter(int counter) {
-		this.counter = counter;
+	public void setCustomerList(Customer customerList[]) {
+		CustomerList = customerList;
 	}
 	
 	/**
 	 * this function will show menu to the customer
-	 * @throws IOException 
 	 */
-	public void showMenu() throws IOException {
-		System.out.println("Please select from follwing items by entering their Id");
-		for(int i=0; i < Menu.itemMenu.length; i++) {
-			System.out.println(Menu.itemMenu[i].getItemId() + " - " + Menu.itemMenu[i].getItemName() + " - " + Menu.itemMenu[i].getItemPrepTime());;
+	public void showMenu() {
+		try {
+			Iterator<Item> i = Menu.itemMenu.iterator();
+			while (i.hasNext()) {
+				Item item = (Item) i.next();
+				System.out.println(item.getItemId() + " - " + item.getItemName() + " - " + item.getItemRate());
+			}
+			
+		} catch(NullPointerException ne) {
+			System.err.println(ne);
 		}
-		System.out.println("Would you like to return to main menu? (y/n)");
-//		int returnToMainMenu = System.in.read();
-//		ans = (char)returnToMainMenu;
-//		if(ans == 'y') {
-//			showMainMenu();
-//		}
 	}
 	
 	/**
 	 * this function will take order from the customer
-	 * @throws IOException 
 	 */
-	public void takeOrder() throws IOException {
-		int orderID = this.counter++;
-		Date currentDateTime = new Date();
-		int selectedChoice= System.in.read(); 
-		System.out.println("You have selected: " + (char)selectedChoice);
-		Item[] selectedItem = new Item[] {};
-		selectedItem[0] = Menu.itemMenu[selectedChoice];
-		Order myOrder = new Order(orderID, currentDateTime, selectedItem);	
-		System.out.println("Your order details are: ");
-		System.out.println(myOrder);
+	public void takeOrder() {
+		Order.createOrder();
 	}
 	
 	/**
@@ -75,7 +65,18 @@ public class Restaurant {
 	 * @param custId - Regular Id of the customer
 	 */
 	public void showRegularCustomerOffers(int custId) {
-		
+		if(custId > 25) {
+			System.out.println("This is not a valid Regular Customer Id");
+		} else {
+			RegularCustomer rc = new RegularCustomer(123, "Chetna", "12-Mar-1994", "987654321", "Regular", "Hell");
+			int day = LocalDateTime.now().getDayOfWeek().getValue();
+			System.out.println(day);
+			if(day == 6 || day == 7) {
+				System.out.println("Hurraaayy!! 10% discount will be applicable on the order");
+			} else {
+				System.out.println("Oops, no offers available for you!");
+			}
+		}
 	}
 	
 	/**
@@ -83,59 +84,68 @@ public class Restaurant {
 	 * @param corpId - Corporate Id of the customer
 	 */
 	public void showCorpCustomerOffers(int corpId) {
+		if(corpId < 24) {
+			System.out.println("This is not a valid Corporate Customer Id");
+		} else {
+			CorporateCustomer cc = new CorporateCustomer(123, "Chetna", "12-Mar-1994", "987654321", "Corporate", "Dusra Hell");
+			System.out.println("You will get a meal voucher of 100 Rs.");
+		}
 		
 	}
 	
-	public void showMainMenu() throws IOException {
-		while(ans == 'y') {
-			switch(i) {
-			case 1: {
-				showMenu();
-				ans = 'n';
-				break;
-			}
-			case 2: {
-				takeOrder();
-				ans = 'n';
-				break;
-			}
-			case 3: {
-				System.out.println("Please enter your order Id");
-				int orderId= System.in.read();
-				checkStatus(orderId);
-				ans = 'n';
-				break;
-			}
-			case 4: {
-				System.out.println("Please enter your regular customer Id");
-				int regCustomerId= System.in.read();
-				checkStatus(regCustomerId);
-				ans = 'n';
-				break;
-			}
-			case 5: {
-				System.out.println("Please enter your corporate customer Id");
-				int corpCustomerId= System.in.read();
-				checkStatus(corpCustomerId);
-				ans = 'n';
-				break;
-			}
-			}
-		}
-	}
-	
 	public static void main(String[] args) throws IOException {
-		System.out.println("Welcome to Debonair Restaurant.");
-		System.out.println("Please select your choice from given menu");
-		System.out.println("1. Show Menu");
-		System.out.println("2. Take Order");
-		System.out.println("3. Check Order status");
-		System.out.println("4. Show Regular customer Offers");
-		System.out.println("5. Show Corporate Customer Offers");
-		i= System.in.read(); 
-		i=Character.getNumericValue(i);
-		System.out.println("You have selected: " + (char)i);
+//		Owner ownerObj = new Owner();
+//		ownerObj.modifyMenu();
 		Restaurant res = new Restaurant();
-		res.showMainMenu();
+		Scanner sc= new Scanner(System.in);
+		int choice = 0;
+		String showMenuChoice = "no";
+		do {
+			System.out.println("Welcome to Debonair Restaurant.");
+			System.out.println("Please select your choice from given menu");
+			System.out.println("1. Show Menu");
+			System.out.println("2. Take Order");
+			System.out.println("3. Check Order status");
+			System.out.println("4. Show Regular customer Offers");
+			System.out.println("5. Show Corporate Customer Offers");
+			System.out.print("Enter your choice :");
+			choice=sc.nextInt();
+			switch(choice) {
+				case 1: {
+					res.showMenu();
+					break;
+				}
+				case 2: {
+					res.takeOrder();
+					break;
+				}
+				case 3: {
+					System.out.println("Please enter your order Id");
+					int orderId= sc.nextInt();
+					res.checkStatus(orderId);
+					break;
+				}
+				case 4: {
+					System.out.println("Please enter your Regular Customer Id");
+					int regCustomerId= sc.nextInt();
+					res.showRegularCustomerOffers(regCustomerId);
+					break;
+				}
+				case 5: {
+					System.out.println("Please enter your Corporate Customer Id");
+					int corpCustomerId= sc.nextInt();
+					res.showCorpCustomerOffers(corpCustomerId);
+					break;
+				}
+				default: System.out.println("Please enter valid choice");
+		        break;	
+		}
+		System.out.println("Would you like to return to main menu? (yes/no)");
+		showMenuChoice=sc.next();
+		} 
+		while(showMenuChoice.equals("yes"));
+		if(showMenuChoice.equals("no"))	{
+			System.exit(1);
+		}
 	}
 }
